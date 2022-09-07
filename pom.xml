@@ -94,6 +94,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>5.7.3</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
