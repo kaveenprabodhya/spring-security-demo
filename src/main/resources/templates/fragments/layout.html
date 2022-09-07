@@ -1,0 +1,95 @@
+<!doctype html>
+<html th:fragment="layout (template, menu)">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/resources/images/favicon.png}">
+
+    <title>Brewery Shop</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+          integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" th:href="@{/resources/css/brewery.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}"><span></span></a>
+        <button class="navbar-toggler navbar-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <span hidden>
+                <li th:fragment="menuItem (path,active,title,glyph,text)" class="nav-item mx-1"
+                    th:classappend="${active==menu ? 'active' : ''}">
+                    <a th:href="@{__${path}__}" th:title="${title}" th:class="nav-link">
+                        <span th:class="'fa  fa-'+${glyph}" class="fa-regular fa-house-blank"
+                              aria-hidden="true"></span>
+                        <span th:text="${text}">Template</span>
+                    </a>
+                </li>
+                </span>
+
+                <li th:replace="::menuItem ('/','home','home page','home','Home')">
+                    <span class="fa-regular fa-house-blank" aria-hidden="true"></span>
+                    <span>Home</span>
+                </li>
+
+                <li th:replace="::menuItem ('/customers/find','customers','find customers','search','Customers')">
+                    <span class="fa-sharp fa-solid fa-magnifying-glass" aria-hidden="true"></span>
+                    <span>Find Customer</span>
+                </li>
+
+                <li th:replace="::menuItem ('/beers/find','beers','find beers','search','Find beers')">
+                    <span class="fa-solid fa-list-ul" aria-hidden="true"></span>
+                    <span>Find Beer</span>
+                </li>
+
+                <li th:replace="::menuItem ('/brewery/breweries','breweries','breweries','th-list','Breweries')">
+                    <span class="fa-solid fa-list-ul" aria-hidden="true"></span>
+                    <span>Breweries</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="container xd-container">
+
+        <th:block th:include="${template}"/>
+
+        <br/>
+        <br/>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <img src="../static/resources/images/spring-pivotal-logo.png"
+                         th:src="@{/resources/images/spring-pivotal-logo.png}"
+                         alt="Sponsored by Pivotal"/></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+
+</html>

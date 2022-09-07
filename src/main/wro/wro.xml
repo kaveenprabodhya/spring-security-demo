@@ -1,0 +1,5 @@
+<groups xmlns="http://www.isdc.ro/wro">
+  <group name="brewery">
+    <css>/brewery.less</css>
+   </group>
+</groups>
