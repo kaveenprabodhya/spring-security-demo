@@ -18,7 +18,7 @@ public abstract class BaseIt {
     @Autowired
     WebApplicationContext wac;
 
-    MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @MockBean
     BeerRepository beerRepository;
