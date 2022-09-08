@@ -60,9 +60,9 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager()
             throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder)
+        return new AuthenticationManagerBuilder(oop)
+                .userDetailsService(userDetailsService())
+                .passwordEncoder(passwordEncoder())
                 .and()
                 .build();
     }
