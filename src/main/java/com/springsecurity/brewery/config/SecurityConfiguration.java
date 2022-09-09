@@ -106,6 +106,13 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
+//        UserBuilder users = User.withDefaultPasswordEncoder();
+//        UserDetails user = users
+//                .username("user")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+
         UserDetails admin =
                 User.builder()
                         .username("spring")
