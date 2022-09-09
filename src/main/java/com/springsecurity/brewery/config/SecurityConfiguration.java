@@ -70,14 +70,14 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-
-        return authProvider;
-    }
+//    @Bean
+//    public DaoAuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userDetailsManager(dataSource()));
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//
+//        return authProvider;
+//    }
 
     @Bean
     DataSource dataSource() {
@@ -87,49 +87,65 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    @Bean
-    UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("password"))
-                .roles("USER", "ADMIN")
-                .build();
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.createUser(user);
-        users.createUser(admin);
-        return users;
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-//        UserBuilder users = User.withDefaultPasswordEncoder();
-//        UserDetails user = users
+//    @Bean
+//    UserDetailsManager userDetailsManager(DataSource dataSource) {
+//        UserDetails user = User.builder()
 //                .username("user")
-//                .password("password")
+//                .password(passwordEncoder().encode("password"))
 //                .roles("USER")
 //                .build();
+//        UserDetails spring = User.builder()
+//                .username("spring")
+//                .password(passwordEncoder().encode("password"))
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("password"))
+//                .roles("USER", "ADMIN")
+//                .build();
+//        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
+//        users.createUser(user);
+//        users.createUser(spring);
+//        users.createUser(admin);
+//        return users;
+//    }
 
-        UserDetails admin =
-                User.builder()
-                        .username("spring")
-                        .password(passwordEncoder().encode("password"))
-                        .roles("ADMIN")
-                        .build();
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+////        UserBuilder users = User.withDefaultPasswordEncoder();
+////        UserDetails user = users
+////                .username("user")
+////                .password("password")
+////                .roles("USER")
+////                .build();
+//
+//        UserDetails admin =
+//                User.builder()
+//                        .username("spring")
+//                        .password(passwordEncoder().encode("password"))
+//                        .roles("ADMIN")
+//                        .build();
+//
+//        UserDetails user =
+//                User.builder()
+//                        .username("user")
+//                        .password(passwordEncoder().encode("password"))
+//                        .roles("USER")
+//                        .build();
+//
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
 
-        UserDetails user =
-                User.builder()
-                        .username("user")
-                        .password(passwordEncoder().encode("password"))
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager()
+//            throws Exception {
+//        return new AuthenticationManagerBuilder(oop)
+//                .userDetailsService(userDetailsManager(dataSource()))
+//                .passwordEncoder(passwordEncoder())
+//                .and()
+//                .build();
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
