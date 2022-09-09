@@ -63,13 +63,13 @@ public class CustomerController {
         return mav;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/new")
     public String initCreationForm(Model model) {
         model.addAttribute("customer", Customer.builder().build());
         return "customers/createCustomer";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new")
     public String processCreationForm(Customer customer) {
         //ToDO: Add Service
