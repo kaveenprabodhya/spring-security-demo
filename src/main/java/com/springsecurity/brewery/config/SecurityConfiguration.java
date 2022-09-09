@@ -1,6 +1,5 @@
 package com.springsecurity.brewery.config;
 
-
 import com.springsecurity.brewery.security.RestHeaderAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +47,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(restHeaderAuthFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(restHeaderAuthFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))),
+                        UsernamePasswordAuthenticationFilter.class)
                 .csrf()
                 .disable();
         http
