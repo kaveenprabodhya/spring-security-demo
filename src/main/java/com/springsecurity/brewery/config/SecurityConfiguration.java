@@ -38,7 +38,7 @@ public class SecurityConfiguration {
     @Autowired
     private ObjectPostProcessor<Object> oop;
 
-    public RestHeaderAuthFilter restHeaderAuthFilter(AuthenticationManager authenticationManager){
+    public RestHeaderAuthFilter restHeaderAuthFilter(AuthenticationManager authenticationManager) {
         RestHeaderAuthFilter filter = new RestHeaderAuthFilter(new AntPathRequestMatcher("/api/**"));
         filter.setAuthenticationManager(authenticationManager);
         return filter;
@@ -57,7 +57,13 @@ public class SecurityConfiguration {
                         .antMatchers("/", "/login").permitAll()
                         .antMatchers("/beers/find", "/beers").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/v1/beer/**").permitAll()
-                        .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll())
+                        .mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
+                        .mvcMatchers(HttpMethod.GET, "/api/v1/beerUpc/{upc}").permitAll()
+                        .mvcMatchers("/brewery/breweries")
+                            .hasAnyRole("ADMIN", "CUSTOMER")
+                        .mvcMatchers(HttpMethod.GET, "/brewery/api/v1/breweries")
+                            .hasAnyRole("ADMIN", "CUSTOMER")
+                )
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
