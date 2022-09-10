@@ -1,51 +1,106 @@
 package com.springsecurity.brewery.web.controllers;
 
-import com.springsecurity.brewery.repositories.BeerInventoryRepository;
+import com.springsecurity.brewery.domain.Beer;
 import com.springsecurity.brewery.repositories.BeerRepository;
-import com.springsecurity.brewery.repositories.CustomerRepository;
-import com.springsecurity.brewery.services.BeerService;
-import com.springsecurity.brewery.services.BreweryService;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 class BeerControllerIT extends BaseIt {
 
-    @WithMockUser("user")
-    @Test
-    void findBeers() throws Exception {
-        mockMvc.perform(get("/beers/find"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
+    @Autowired
+    BeerRepository beerRepository;
+
+    @DisplayName("Init New Form")
+    @Nested
+    class InitNewForm{
+
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("com.springsecurity.brewery.web.controllers.BeerControllerIT#getStreamAllUsers")
+        void initCreationFormAuth(String user, String pwd) throws Exception {
+
+            mockMvc.perform(get("/beers/new").with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/createBeer"))
+                    .andExpect(model().attributeExists("beer"));
+        }
+
+        @Test
+        void initCreationFormNotAuth() throws Exception {
+            mockMvc.perform(get("/beers/new"))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 
-    @Test
-    void findBeersWithHttpBasic() throws Exception {
-        mockMvc.perform(get("/beers/find").with(httpBasic("user", "password")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/findBeers"))
-                .andExpect(model().attributeExists("beer"));
+    @DisplayName("Init Find Beer Form")
+    @Nested
+    class FindForm{
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("com.springsecurity.brewery.web.controllers.BeerControllerIT#getStreamAllUsers")
+        void findBeersFormAUTH(String user, String pwd) throws Exception{
+            mockMvc.perform(get("/beers/find")
+                            .with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/findBeers"))
+                    .andExpect(model().attributeExists("beer"));
+        }
+
+        @Test
+        void findBeersWithAnonymous() throws Exception{
+            mockMvc.perform(get("/beers/find").with(anonymous()))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 
-    @Test
-    void initCreatingForm() throws Exception{
-        mockMvc.perform(get("/beers/new").with(httpBasic("spring", "password")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/createBeer"))
-                .andExpect(model().attributeExists("beer"));
+    @DisplayName("Process Find Beer Form")
+    @Nested
+    class ProcessFindForm{
+        @Test
+        void findBeerForm() throws Exception {
+            mockMvc.perform(get("/beers").param("beerName", ""))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("com.springsecurity.brewery.web.controllers.BeerControllerIT#getStreamAllUsers")
+        void findBeerFormAuth(String user, String pwd) throws Exception {
+            mockMvc.perform(get("/beers").param("beerName", "")
+                            .with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk());
+        }
+    }
+
+    @DisplayName("Get Beer By Id")
+    @Nested
+    class GetByID {
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("com.springsecurity.brewery.web.controllers.BeerControllerIT#getStreamAllUsers")
+        void getBeerByIdAUTH(String user, String pwd) throws Exception{
+            Beer beer = beerRepository.findAll().get(0);
+
+            mockMvc.perform(get("/beers/" + beer.getId())
+                            .with(httpBasic(user, pwd)))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/beerDetails"))
+                    .andExpect(model().attributeExists("beer"));
+        }
+
+        @Test
+        void getBeerByIdNoAuth() throws Exception{
+            Beer beer = beerRepository.findAll().get(0);
+
+            mockMvc.perform(get("/beers/" + beer.getId()))
+                    .andExpect(status().isUnauthorized());
+        }
     }
 }
