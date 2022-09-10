@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +30,13 @@ public class User {
 
     @Transient
     private Set<Authority> authorities;
+
+    public Set<Authority> getAuthorities() {
+        return this.roles.stream()
+                .map(Role::getAuthorities)
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+    }
 
     @Builder.Default
     private Boolean accountNonExpired = true;
