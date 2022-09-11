@@ -7,7 +7,7 @@ import com.springsecurity.brewery.web.model.BeerOrderLineDto;
 import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 
-@Mapper(uses = {DateMapper.class})
+@Mapper(uses = {DateMapper.class}, componentModel = "spring")
 @DecoratedWith(BeerOrderLineMapperDecorator.class)
 public interface BeerOrderLineMapper {
     BeerOrderLineDto beerOrderLineToDto(BeerOrderLine line);
