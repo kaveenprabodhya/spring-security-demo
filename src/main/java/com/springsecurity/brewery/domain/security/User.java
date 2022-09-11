@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Builder
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails, CredentialsContainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -38,6 +38,26 @@ public class User {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
     @Builder.Default
     private Boolean accountNonExpired = true;
     @Builder.Default
@@ -46,4 +66,9 @@ public class User {
     private Boolean credentialsNonExpired = true;
     @Builder.Default
     private Boolean enabled = true;
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null;
+    }
 }
