@@ -56,10 +56,6 @@ public class UserDataLoader implements CommandLineRunner {
 
         roleRepository.saveAll(Arrays.asList(adminRole, customerRole, userRole));
 
-//        Authority adminRole = authorityRepository.save(Authority.builder().authority("ROLE_ADMIN").build());
-//        Authority userRole = authorityRepository.save(Authority.builder().authority("ROLE_USER").build());
-//        Authority customerRole = authorityRepository.save(Authority.builder().authority("ROLE_CUSTOMER").build());
-
         userRepository.save(User.builder()
                 .username("spring")
                 .password(passwordEncoder.encode("password"))
