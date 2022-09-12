@@ -25,7 +25,7 @@ public class LoginSuccess {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private Timestamp timestamp;
+    private Timestamp createDate;
 
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
