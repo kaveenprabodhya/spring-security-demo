@@ -55,7 +55,7 @@ public class AuthenticationFailureLoginEvent {
         List<LoginFailure> failures = loginFailureRepository.findAllByUserAndCreatedDateIsAfter(user,
                 Timestamp.valueOf(LocalDateTime.now().minusDays(1)));
 
-        if(failures.size() > 3){
+        if(failures.size() >= 3){
             log.debug("Locking User Account... ");
             user.setAccountNonLocked(false);
             userRepository.save(user);
