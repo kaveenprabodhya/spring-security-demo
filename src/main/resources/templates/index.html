@@ -11,9 +11,19 @@
 <h2 th:text="#{welcomemsg}">Brewery Monolith</h2>
 
 
-<div class="container" sec:authorize="!isAuthenticated()">
-    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or Password</div>
+<div class="container mb-3" sec:authorize="!isAuthenticated()">
+<!--    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or Password</div>-->
+    <div
+            th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']?.message} == 'Bad credentials'"
+            class="alert alert-danger">
+        Invalid Username or Password
+    </div>
     <div th:if="${param.logout}" class="alert alert-success">You Have Successfully Logout</div>
+    <div
+            th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']?.message} == 'User account is locked'"
+            class="alert alert-danger">
+        User Account is Locked.
+    </div>
     <form th:action="@{/login}" method="post">
         <div class="form-group mb-3">
             <label class="form-label" for="username">Username</label>
