@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .successForwardUrl("/")
                                 .defaultSuccessUrl("/")
-                                .failureUrl("/error"))
+                                .failureUrl("/?error"))
                 .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                         .logoutSuccessUrl("/?logout")
