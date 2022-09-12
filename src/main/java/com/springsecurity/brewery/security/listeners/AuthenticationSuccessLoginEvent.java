@@ -14,21 +14,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class AuthenticationEvents {
+public class AuthenticationSuccessLoginEvent {
     private final LoginSuccessRepository loginSuccessRepository;
     @EventListener
     public void onSuccess(AuthenticationSuccessEvent event) {
         log.debug("User Logged In OK.");
-        if(event.getSource() instanceof UsernamePasswordAuthenticationToken){
+        if(event.getSource() instanceof UsernamePasswordAuthenticationToken token){
             LoginSuccess.LoginSuccessBuilder builder = LoginSuccess.builder();
-            UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) event.getSource();
-            if(token.getPrincipal() instanceof User){
-                User user = (User) token.getPrincipal();
+            if(token.getPrincipal() instanceof User user){
                 builder.user(user);
                 log.debug("User named logged in: "+ user.getUsername());
             }
-            if(token.getDetails() instanceof WebAuthenticationDetails){
-                WebAuthenticationDetails details = (WebAuthenticationDetails) token.getDetails();
+            if(token.getDetails() instanceof WebAuthenticationDetails details){
                 log.debug("Source ip: "+details.getRemoteAddress());
                 builder.sourceIp(details.getRemoteAddress());
             }
