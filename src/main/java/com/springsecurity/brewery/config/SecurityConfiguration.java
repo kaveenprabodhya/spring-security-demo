@@ -71,7 +71,8 @@ public class SecurityConfiguration {
                 .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**")
                 .and()
                 .rememberMe()
-                .key("sec-key");
+//                .key("sec-key");
+        .tokenRepository(persistentTokenRepository(dataSource()));
         // h2 console config
         http
                 .headers().frameOptions().sameOrigin();
