@@ -224,7 +224,7 @@ public class DefaultBreweryLoader implements CommandLineRunner {
                         createOrder, readOrder, updateOrder, deleteOrder, pickupOrder)));
         customerRole.setAuthorities(new HashSet<>(Set.of(readBeer, createBeer, readCustomer, readBrewery,
                 readOrderCustomer, createOrderCustomer, updateOrderCustomer, deleteOrderCustomer, pickupOrderCustomer)));
-        userRole.setAuthorities(new HashSet<>(Set.of(readBeer, createBeer)));
+        userRole.setAuthorities(new HashSet<>(Set.of(readBeer)));
 
         roleRepository.saveAll(Arrays.asList(adminRole, customerRole, userRole));
 
