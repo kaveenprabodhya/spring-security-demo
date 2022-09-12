@@ -58,7 +58,18 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().and()
+                .formLogin(httpSecurityFormLoginConfigurer ->
+                        httpSecurityFormLoginConfigurer
+                                .loginProcessingUrl("/login")
+                                .loginPage("/")
+                                .permitAll()
+                                .successForwardUrl("/")
+                                .defaultSuccessUrl("/")
+                                .failureUrl("/error"))
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+                        .logoutSuccessUrl("/?logout")
+                        .permitAll())
                 .httpBasic()
                 .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
         // h2 console config
