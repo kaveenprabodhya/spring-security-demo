@@ -60,7 +60,10 @@ public class SecurityConfiguration {
                         .logoutSuccessUrl("/?logout")
                         .permitAll())
                 .httpBasic()
-                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**");
+                .and().csrf().ignoringAntMatchers("/h2-console/**", "/api/**")
+                .and()
+                .rememberMe()
+                .key("sec-key");
         // h2 console config
         http
                 .headers().frameOptions().sameOrigin();
