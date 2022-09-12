@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'home')}">
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'home')}">
 <head>
     <meta charset="UTF-8"/>
     <title>Brewery</title>
@@ -7,9 +10,39 @@
 <body>
 <h2 th:text="#{welcomemsg}">Brewery Monolith</h2>
 
+
+<div class="container" sec:authorize="!isAuthenticated()">
+    <div th:if="${param.error}" class="alert alert-danger">Invalid Username or Password</div>
+    <div th:if="${param.logout}" class="alert alert-success">You Have Successfully Logout</div>
+    <form th:action="@{/login}" method="post">
+        <div class="form-group mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" autofocus="true" autocomplete="off"/>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" autofocus="true"
+                   autocomplete="off"/>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Login">
+    </form>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col d-flex">
+            <p sec:authorize="isAuthenticated()" th:text="'Hi: ' + ${#authentication?.principal?.username}">
+                User</p>
+        </div>
+        <div class="col d-flex">
+            <p class="ms-auto" sec:authorize="isAuthenticated()"><a th:href="@{/logout}" class="btn btn-danger my-2">Logout</a></p>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
-        <img class="img-responsive" src="../static/resources/images/brewery.png" th:src="@{/resources/images/brewery.png}"/>
+        <img class="img-responsive" src="../static/resources/images/brewery.png"
+             th:src="@{/resources/images/brewery.png}"/>
     </div>
 </div>
 
